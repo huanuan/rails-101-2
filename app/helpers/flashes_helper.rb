@@ -1,8 +1,8 @@
-module FlashesHelper.#!/usr/bin/env ruby -wKU
-  FLASH_CLASSES = { alert: "danger", notice: "success", warning:"waining"}.freeze
+module FlashesHelper#!/usr/bin/env ruby -wKU
+  FLASH_CLASSES = { alert: "danger", notice: "success", warning: "warning"}.freeze
 
   def flash_class(key)
-    FLASHE_CLASSES.fetch key.to_sym, key
+    FLASH_CLASSES.fetch key.to_sym, key
   end
 
   def user_facing_flashes
