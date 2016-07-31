@@ -13,15 +13,8 @@ before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
   end
 
   def show
-      @group = Group.new(group_params)
-      @group.user = current_user
-      if @group.save
-          current_user.join!(@group)
-          redirect_to groups_path
-      else
-          render :new
-    end
-
+      @group = Group.find(params[:id])
+      @posts = @group.posts.recent.paginate(:page => params[:page], :per_page => 5)
   end
 
   def create
@@ -29,6 +22,7 @@ before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
       @group.user = current_user
 
       if @group.save
+          current_user.join!(@group)
           redirect_to groups_path
       else
           render :new
@@ -48,18 +42,18 @@ before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
       redirect_to groups_path, alert: "Group deleted"
   end
 
-    def join
-        @group = Group.find(params[:id])
+  def join
+      @group = Group.find(params[:id])
 
-        if !current_user.is_member_of?(@group)
-            current_user.join!(@group)
-            flash[:notice] = "加入本讨论版成功!"
-        else
-            flash[:warning] = "你已经是本讨论版成员了!"
-        end
+      if !current_user.is_member_of?(@group)
+          current_user.join!(@group)
+          flash[:notice] = "加入本讨论版成功!"
+      else
+          flash[:warning] = "你已经是本讨论版成员了!"
+      end
 
-        redirect_to group_path(@group)
-    end
+      redirect_to group_path(@group)
+  end
 
   def quit
       @group = Group.find(params[:id])
