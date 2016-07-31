@@ -1,2 +1,0 @@
-class PastsController < ApplicationController
-end
